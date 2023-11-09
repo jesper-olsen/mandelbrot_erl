@@ -10,7 +10,8 @@
 %% escript Entry point
 main(Args) ->
     io:format("Args: ~p~n", [Args]),
-    mandelbrot:plot_ascii({-1.20, 0.20}, {-1.0, 0.35}, {60, 30}),
+    mandelbrot:plot(ascii, {-1.20, 0.20}, {-1.0, 0.35}, {60, 30}),
+    mandelbrot:plot(png, {-1.20, 0.20}, {-1.0, 0.35}, {1000, 750}),
     erlang:halt(0).
 
 %%====================================================================

@@ -1,5 +1,5 @@
 -module(png).
--export([make_gray_png/1, example/0]).
+-export([make_gray_png/1, make_gray_png/2, example/0]).
 %-compile(export_all).
 
 make_gray_png(Data) ->
@@ -42,12 +42,14 @@ make_idata_raw([Row | RestRows], Acc) ->
     B=list_to_binary(Row),
     make_idata_raw(RestRows, <<Acc/binary, 0:8, B/binary>>).
 
-example() ->
-    Data = [[0, 255, 0], [255, 255, 255], [0, 255, 0]],
+make_gray_png(Fname, Data) ->
     PngData = make_gray_png(Data),
-    Fname="cross3x3.png",
     erlang:display("Saving to " ++ Fname),
     {ok, File} = file:open(Fname, [write, binary]),
     file:write(File, PngData),
     file:close(File).
+
+example() ->
+    Data = [[0, 255, 0], [255, 255, 255], [0, 255, 0]],
+    make_gray_png("cross3x3.png", Data).
 
