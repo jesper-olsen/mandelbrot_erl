@@ -1,5 +1,17 @@
 -module(mandelbrot).
 
+-define(ADD(Rr, Ir, R1, I1, R2, I2),
+        begin
+            Rr = R1 + R2,
+            Ir = I1 + I2
+        end).
+-define(NORMSQ(R, I), R * R + I * I).
+-define(SQUARE(Rr, Ir, R, I),
+        begin
+            Rr = R * R - I * I,
+            Ir = 2 * R * I
+        end).
+
 -export([plot/4]).
 
 %-compile(export_all).
@@ -47,21 +59,15 @@ calc_pixels(LowerLeft, UpperRight, Bound) ->
     {WIDTH, HEIGHT} = Bound,
     R = [LLx + X * (URx - LLx) / WIDTH || X <- lists:seq(0, WIDTH - 1)],
     C = [LLy + Y * (URy - LLy) / HEIGHT || Y <- lists:seq(HEIGHT - 1, 0, -1)],
-    [[255 - escape({X, Y}, 255, 0) || X <- R] || Y <- C].
+    [[255 - escape(0.0, 0.0, X, Y, 255, 0) || X <- R] || Y <- C].
 
-escape(C, Limit, It) ->
-    escape({0.0, 0.0}, C, Limit, It).
-
-escape(_, _, Limit, It) when It >= Limit ->
-    It;
-escape(Z, C, Limit, It) ->
-    case complex:norm_sqr(Z) < 2.0 of
-        false ->
-            It;
-        true ->
-            escape(complex:add(
-                       complex:mul(Z, Z), C),
-                   C,
-                   Limit,
-                   It + 1)
+escape(R, I, Rc, Ic, Limit, It) ->
+    if It >= Limit ->
+           It;
+       ?NORMSQ(R, I) >= 2.0 ->
+           It;
+       true ->
+           ?SQUARE(Rs, Is, R, I),
+           ?ADD(Rx, Ix, Rs, Is, Rc, Ic),
+           escape(Rx, Ix, Rc, Ic, Limit, It + 1)
     end.
