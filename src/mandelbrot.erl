@@ -1,4 +1,5 @@
 -module(mandelbrot).
+
 -include_lib("eunit/include/eunit.hrl").
 
 -export([plot/4]).
@@ -50,18 +51,16 @@ calc_pixels(LowerLeft, UpperRight, Bound) ->
     C = [LLy + Y * (URy - LLy) / HEIGHT || Y <- lists:seq(HEIGHT - 1, 0, -1)],
     [[255 - escape({0.0, 0.0}, {X, Y}, 255, 0) || X <- R] || Y <- C].
 
-escape(_, _, Limit, It) when It>=Limit -> It;
-
-escape(Z, C, Limit, It) -> 
-    {Zr,Zi} = Z,
-    case Zr*Zr + Zi*Zi<2.0 of 
-    false  -> It;
-    true ->
-           {Zr, Zi} = Z,
-           {Cr, Ci} = C,
-           Zn={Zr*Zr - Zi*Zi + Cr, 2*Zi*Zr + Ci}, % Z*Z + C
-           escape(Zn, C, Limit, It + 1)
+escape(_, _, Limit, It) when It >= Limit ->
+    It;
+escape({Zr,Zi}, {Cr,Ci}, Limit, It) ->
+    case Zr * Zr + Zi * Zi < 2.0 of
+        false ->
+            It;
+        true ->
+            Zn = {Zr * Zr - Zi * Zi + Cr, 2 * Zi * Zr + Ci}, % Z*Z + C
+            escape(Zn, {Cr,Ci}, Limit, It + 1)
     end.
 
 escape_test1() ->
-    ?assert(escape({0.0,0.0}, {0.0, 0.0}, 255, 0) =:= 255).
+    ?assert(escape({0.0, 0.0}, {0.0, 0.0}, 255, 0) =:= 255).
