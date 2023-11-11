@@ -1,16 +1,5 @@
 -module(mandelbrot).
-
--define(ADD(Rr, Ir, R1, I1, R2, I2),
-        begin
-            Rr = R1 + R2,
-            Ir = I1 + I2
-        end).
--define(NORMSQ(R, I), R * R + I * I).
--define(SQUARE(Rr, Ir, R, I),
-        begin
-            Rr = R * R - I * I,
-            Ir = 2 * R * I
-        end).
+-include_lib("eunit/include/eunit.hrl").
 
 -export([plot/4]).
 
@@ -59,15 +48,20 @@ calc_pixels(LowerLeft, UpperRight, Bound) ->
     {WIDTH, HEIGHT} = Bound,
     R = [LLx + X * (URx - LLx) / WIDTH || X <- lists:seq(0, WIDTH - 1)],
     C = [LLy + Y * (URy - LLy) / HEIGHT || Y <- lists:seq(HEIGHT - 1, 0, -1)],
-    [[255 - escape(0.0, 0.0, X, Y, 255, 0) || X <- R] || Y <- C].
+    [[255 - escape({0.0, 0.0}, {X, Y}, 255, 0) || X <- R] || Y <- C].
 
-escape(R, I, Rc, Ic, Limit, It) ->
-    if It >= Limit ->
-           It;
-       ?NORMSQ(R, I) >= 2.0 ->
-           It;
-       true ->
-           ?SQUARE(Rs, Is, R, I),
-           ?ADD(Rx, Ix, Rs, Is, Rc, Ic),
-           escape(Rx, Ix, Rc, Ic, Limit, It + 1)
+escape(_, _, Limit, It) when It>=Limit -> It;
+
+escape(Z, C, Limit, It) -> 
+    {Zr,Zi} = Z,
+    case Zr*Zr + Zi*Zi<2.0 of 
+    false  -> It;
+    true ->
+           {Zr, Zi} = Z,
+           {Cr, Ci} = C,
+           Zn={Zr*Zr - Zi*Zi + Cr, 2*Zi*Zr + Ci}, % Z*Z + C
+           escape(Zn, C, Limit, It + 1)
     end.
+
+escape_test1() ->
+    ?assert(escape({0.0,0.0}, {0.0, 0.0}, 255, 0) =:= 255).
