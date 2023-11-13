@@ -35,21 +35,20 @@ cnt2char(N) when N >= 0 ->
 
 % mandelbrot:plot(ascii, {-1.20,0.20}, {-1.0,0.35},{60,30}).
 plot(Type, LowerLeft, UpperRight, Bound) ->
-    P = calc_pixels(LowerLeft, UpperRight, Bound),
+    M = sequential,
+    %M=parallel,
+    P = case M of
+            sequential ->
+                calc_pixels(LowerLeft, UpperRight, Bound);
+            parallel ->
+                pcalc_pixels(LowerLeft, UpperRight, Bound)
+        end,
     case Type of
         ascii ->
             render_ascii(P);
         png ->
             png:make_gray_png("mandelbrot.png", P)
     end.
-
-calc_pixels(LowerLeft, UpperRight, Bound) ->
-    {LLx, LLy} = LowerLeft,
-    {URx, URy} = UpperRight,
-    {WIDTH, HEIGHT} = Bound,
-    R = [LLx + X * (URx - LLx) / WIDTH || X <- lists:seq(0, WIDTH - 1)],
-    C = [LLy + Y * (URy - LLy) / HEIGHT || Y <- lists:seq(HEIGHT - 1, 0, -1)],
-    [[255 - escape({0.0, 0.0}, {X, Y}, 255, 0) || X <- R] || Y <- C].
 
 escape(_, _, Limit, It) when It >= Limit ->
     It;
@@ -61,6 +60,37 @@ escape({Zr, Zi}, {Cr, Ci}, Limit, It) ->
             Zn = {Zr * Zr - Zi * Zi + Cr, 2 * Zi * Zr + Ci}, % Z*Z + C
             escape(Zn, {Cr, Ci}, Limit, It + 1)
     end.
+
+% mandelbrot:calc_pixels({-1.20,0.20}, {-1.0,0.35},{60,30}).
+calc_pixels({LLx, LLy}, {URx, URy}, {WIDTH, HEIGHT}) ->
+    R = [LLx + X * (URx - LLx) / WIDTH || X <- lists:seq(0, WIDTH - 1)],
+    C = [LLy + Y * (URy - LLy) / HEIGHT || Y <- lists:seq(HEIGHT - 1, 0, -1)],
+    [[255 - escape({0.0, 0.0}, {X, Y}, 255, 0) || X <- R] || Y <- C].
+
+pcalc_pixels({LLx, LLy}, {URx, URy}, {WIDTH, HEIGHT}) ->
+    R = [LLx + X * (URx - LLx) / WIDTH || X <- lists:seq(0, WIDTH - 1)],
+    C = [LLy + Y * (URy - LLy) / HEIGHT || Y <- lists:seq(HEIGHT - 1, 0, -1)],
+    ROWS = [[{X, Y} || X <- R] || Y <- C],
+    pmap(fun(Row) -> [255 - escape({0.0, 0.0}, C, 255, 0) || C <- Row] end, ROWS).
+
+pmap(F, L) ->
+    S = self(),
+
+    Ref = erlang:make_ref(), % unique
+    Pids = lists:map(fun(I) -> spawn(fun() -> do_f(S, Ref, F, I) end) end, L),
+    %% gather the results
+    gather(Pids, Ref).
+
+do_f(Parent, Ref, F, I) ->
+    Parent ! {self(), Ref, catch F(I)}.
+
+gather([Pid | T], Ref) ->
+    receive
+        {Pid, Ref, Ret} ->
+            [Ret | gather(T, Ref)]
+    end;
+gather([], _) ->
+    [].
 
 escape_test1() ->
     ?assert(escape({0.0, 0.0}, {0.0, 0.0}, 255, 0) =:= 255).
