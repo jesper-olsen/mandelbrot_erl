@@ -43,3 +43,17 @@ which will produce an ascii result
 
 as well as a PNG result
 ![PNG](https://raw.githubusercontent.com/jesper-olsen/mandelbrot_erl/main/mandelbrot.png) 
+
+Benchmark
+---------
+
+| Width  | Height | Parallel | Time (sec) |
+| ------:| ------:| :------: | ---------: |
+| 5000   | 5000   | false    | 61         |
+| 5000   | 5000   | true     | 27         |
+| 50000  | 500    | false    | 61         |
+| 50000  | 500    | true     | 17         |
+| 500000 | 50     | false    | 72         |
+| 500000 | 50     | true     | 19         |
+| 5000000| 5      | false    | 135        |
+| 5000000| 5      | true     | 27         |
