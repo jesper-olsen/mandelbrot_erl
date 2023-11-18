@@ -1,19 +1,32 @@
 mandelbrot_erl
 ==============
 
-An escript
+An escript for calculating the mandelbrot set.
+
+Can run sequentially or spawn multiple processes.
 
 Build
 -----
 
     $ rebar3 escriptize
 
+Usage
+-----
+```
+Usage:
+  mandelbrot_erl [-p] [-h <height>] [-w <width>]
+
+Optional arguments:
+  -h height (int, 750)
+  -w width (int, 1000)
+  -p parallel (false)
+```
+
+
 Run
 ---
-
     $ _build/default/bin/mandelbrot_erl
 
-                                                            
 which will produce an ascii result                                                             
 ```
   .                                                       . 
@@ -42,10 +55,20 @@ which will produce an ascii result
 ```
 
 as well as a PNG result
-![PNG](https://raw.githubusercontent.com/jesper-olsen/mandelbrot_erl/main/mandelbrot.png) 
+![PNG](https://github.com/jesper-olsen/mandelbrot_erl/main/mandelbrot.png) 
 
 Benchmark
 ---------
+
+By default the area with lower left {-1.20,0.20} and upper right {-1.0,0.35} is mapped.
+
+In parallel mode (option -p) the program spawns a separate process per image row. In the benchmark we keep the number of pixels fixed at 25 million and vary the number of processes spawned.
+
+All the times below are when running on a Macbook Air M1 (2020).
+
+```
+$ time _build/default/bin/mandelbrot_erl -w 5000 -h 5000 -p
+```
 
 | Width  | Height | Parallel | Time (sec) |
 | ------:| ------:| :------: | ---------: |
