@@ -2,7 +2,7 @@
 
 -include_lib("eunit/include/eunit.hrl").
 
--export([plot/4]).
+-export([plot/5]).
 
 %-compile(export_all).
 
@@ -33,21 +33,19 @@ cnt2char(N) when N >= 15 ->
 cnt2char(N) when N >= 0 ->
     "M".
 
-% mandelbrot:plot(ascii, {-1.20,0.20}, {-1.0,0.35},{60,30}).
-plot(Type, LowerLeft, UpperRight, Bound) ->
-    M = sequential,
-    %M=parallel,
-    P = case M of
-            sequential ->
+% mandelbrot:plot(sequential, ascii, {-1.20,0.20}, {-1.0,0.35},{60,30}).
+plot(Parallel, Type, LowerLeft, UpperRight, Bound) ->
+    Pixels = case Parallel of
+            false  ->
                 calc_pixels(LowerLeft, UpperRight, Bound);
-            parallel ->
+            true ->
                 pcalc_pixels(LowerLeft, UpperRight, Bound)
         end,
     case Type of
         ascii ->
-            render_ascii(P);
+            render_ascii(Pixels);
         png ->
-            png:make_gray_png("mandelbrot.png", P)
+            png:make_gray_png("mandelbrot.png", Pixels)
     end.
 
 escape(_, _, Limit, It) when It >= Limit ->
