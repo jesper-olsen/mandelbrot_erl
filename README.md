@@ -55,7 +55,7 @@ which will produce an ascii result
 ```
 
 as well as a PNG result
-![PNG](https://github.com/jesper-olsen/mandelbrot_erl/main/mandelbrot.png) 
+![PNG](https://raw.githubusercontent.com/jesper-olsen/mandelbrot_erl/main/mandelbrot.png) 
 
 Benchmark
 ---------
