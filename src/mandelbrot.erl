@@ -18,25 +18,16 @@ render_ascii_row([H | T]) ->
     io:format(cnt2char(H)),
     render_ascii_row(T).
 
-cnt2char(N) when N >= 200 ->
-    " ";
-cnt2char(N) when N >= 150 ->
-    ".";
-cnt2char(N) when N >= 100 ->
-    "_";
-cnt2char(N) when N >= 70 ->
-    "a";
-cnt2char(N) when N >= 30 ->
-    "2";
-cnt2char(N) when N >= 15 ->
-    "W";
-cnt2char(N) when N >= 0 ->
-    "M".
+symbols() -> "MW2a_. ".
+cnt2char(N) when N>=0 ->
+    Idx = round((N/ 255) * (length(symbols()) - 1)),
+    [lists:nth(Idx + 1, symbols())].
 
 % mandelbrot:plot(sequential, ascii, {-1.20,0.20}, {-1.0,0.35},{60,30}).
 plot(Parallel, Type, LowerLeft, UpperRight, Bound) ->
-    Pixels = case Parallel of
-            false  ->
+    Pixels =
+        case Parallel of
+            false ->
                 calc_pixels(LowerLeft, UpperRight, Bound);
             true ->
                 pcalc_pixels(LowerLeft, UpperRight, Bound)
@@ -51,24 +42,26 @@ plot(Parallel, Type, LowerLeft, UpperRight, Bound) ->
 escape(_, _, Limit, It) when It >= Limit ->
     It;
 escape({Zr, Zi}, {Cr, Ci}, Limit, It) ->
+    % Note faster to calculate Zn here than in true clause, because
+    % the beam will otherwise not keep it in a special register...
+    Zn = {Zr * Zr - Zi * Zi + Cr, 2 * Zi * Zr + Ci}, % Z*Z + C
     case Zr * Zr + Zi * Zi < 2.0 of
         false ->
             It;
         true ->
-            Zn = {Zr * Zr - Zi * Zi + Cr, 2 * Zi * Zr + Ci}, % Z*Z + C
             escape(Zn, {Cr, Ci}, Limit, It + 1)
     end.
 
 % mandelbrot:calc_pixels({-1.20,0.20}, {-1.0,0.35},{60,30}).
 calc_pixels({LLx, LLy}, {URx, URy}, {WIDTH, HEIGHT}) ->
     R = [LLx + X * (URx - LLx) / WIDTH || X <- lists:seq(0, WIDTH - 1)],
-    C = [LLy + Y * (URy - LLy) / HEIGHT || Y <- lists:seq(HEIGHT - 1, 0, -1)],
-    [[255 - escape({0.0, 0.0}, {X, Y}, 255, 0) || X <- R] || Y <- C].
+    I = [LLy + Y * (URy - LLy) / HEIGHT || Y <- lists:seq(HEIGHT - 1, 0, -1)],
+    [[255 - escape({0.0, 0.0}, {X, Y}, 255, 0) || X <- R] || Y <- I].
 
 pcalc_pixels({LLx, LLy}, {URx, URy}, {WIDTH, HEIGHT}) ->
     R = [LLx + X * (URx - LLx) / WIDTH || X <- lists:seq(0, WIDTH - 1)],
-    C = [LLy + Y * (URy - LLy) / HEIGHT || Y <- lists:seq(HEIGHT - 1, 0, -1)],
-    ROWS = [[{X, Y} || X <- R] || Y <- C],
+    I = [LLy + Y * (URy - LLy) / HEIGHT || Y <- lists:seq(HEIGHT - 1, 0, -1)],
+    ROWS = [[{X, Y} || X <- R] || Y <- I],
     pmap(fun(Row) -> [255 - escape({0.0, 0.0}, C, 255, 0) || C <- Row] end, ROWS).
 
 pmap(F, L) ->
