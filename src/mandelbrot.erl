@@ -55,12 +55,12 @@ escape({Zr, Zi}, {Cr, Ci}, Limit, It) ->
 % mandelbrot:calc_pixels({-1.20,0.20}, {-1.0,0.35},{60,30}).
 calc_pixels({LLx, LLy}, {URx, URy}, {WIDTH, HEIGHT}) ->
     R = [LLx + X * (URx - LLx) / WIDTH || X <- lists:seq(0, WIDTH - 1)],
-    I = [LLy + Y * (URy - LLy) / HEIGHT || Y <- lists:seq(HEIGHT - 1, 0, -1)],
+    I = [URy - Y * (URy - LLy) / HEIGHT || Y <- lists:seq(0, HEIGHT -1)],
     [[255 - escape({0.0, 0.0}, {X, Y}, 255, 0) || X <- R] || Y <- I].
 
 pcalc_pixels({LLx, LLy}, {URx, URy}, {WIDTH, HEIGHT}) ->
     R = [LLx + X * (URx - LLx) / WIDTH || X <- lists:seq(0, WIDTH - 1)],
-    I = [LLy + Y * (URy - LLy) / HEIGHT || Y <- lists:seq(HEIGHT - 1, 0, -1)],
+    I = [URy - Y * (URy - LLy) / HEIGHT || Y <- lists:seq(0, HEIGHT -1)],
     ROWS = [[{X, Y} || X <- R] || Y <- I],
     pmap(fun(Row) -> [255 - escape({0.0, 0.0}, C, 255, 0) || C <- Row] end, ROWS).
 
