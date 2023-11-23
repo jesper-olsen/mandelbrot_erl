@@ -8,22 +8,19 @@
 
 render_ascii([]) ->
     ok;
-render_ascii([Row | RestRows]) ->
-    render_ascii_row(Row),
-    render_ascii(RestRows).
-
-render_ascii_row([]) ->
-    io:format("~n");
-render_ascii_row([H | T]) ->
-    io:format(cnt2char(H)),
-    render_ascii_row(T).
+render_ascii([ROW | REST_ROWS]) ->
+    LINE=lists:foldl(fun(Z, S) -> [cnt2char(Z) | S] end, [], ROW),
+    io:format("~s~n", [lists:reverse(LINE)]),
+    render_ascii(REST_ROWS).
 
 symbols() -> "MW2a_. ".
 cnt2char(N) when N>=0 ->
     Idx = round((N/ 255) * (length(symbols()) - 1)),
     [lists:nth(Idx + 1, symbols())].
 
-% mandelbrot:plot(sequential, ascii, {-1.20,0.20}, {-1.0,0.35},{60,30}).
+example() ->
+    plot(false, ascii, {-1.20,0.20}, {-1.0,0.35},{60,30}).
+
 plot(Parallel, Type, LowerLeft, UpperRight, Bound) ->
     Pixels =
         case Parallel of
