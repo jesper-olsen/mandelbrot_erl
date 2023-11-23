@@ -4,8 +4,6 @@
 
 -export([plot/5]).
 
-%-compile(export_all).
-
 render_ascii([]) ->
     ok;
 render_ascii([ROW | REST_ROWS]) ->
@@ -49,7 +47,6 @@ escape({Zr, Zi}, {Cr, Ci}, Limit, It) ->
             escape(Zn, {Cr, Ci}, Limit, It + 1)
     end.
 
-% mandelbrot:calc_pixels({-1.20,0.20}, {-1.0,0.35},{60,30}).
 calc_pixels({LLx, LLy}, {URx, URy}, {WIDTH, HEIGHT}) ->
     R = [LLx + X * (URx - LLx) / WIDTH || X <- lists:seq(0, WIDTH - 1)],
     I = [URy - Y * (URy - LLy) / HEIGHT || Y <- lists:seq(0, HEIGHT -1)],

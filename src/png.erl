@@ -47,8 +47,8 @@ make_idat(ROWS) ->
     <<BSIZE:32, Chunk/binary, CRC:32>>.
 
 make_gray_png(Fname, Data) ->
-    PngData = make_gray_png(Data),
     erlang:display("Saving to " ++ Fname),
+    PngData = make_gray_png(Data),
     {ok, File} = file:open(Fname, [write, binary]),
     file:write(File, PngData),
     file:close(File).
