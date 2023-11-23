@@ -32,8 +32,10 @@ make_ihdr(Width, Height) ->
     BSIZE = byte_size(IHDR),
     <<BSIZE:32, Chunk/binary, CRC:32>>.
 
-make_idat(Data) ->
-    Raw = make_idata_raw(Data, <<>>),
+make_idat(ROWS) ->
+    L=lists:map(fun(L) -> list_to_binary(L) end, ROWS),
+    % each row starts with 0 => no filter for scanline
+    Raw = lists:foldl(fun(R,D) -> <<D/binary, 0:8, R/binary>> end, <<>>, L),
 
     Z = zlib:open(),
     zlib:deflateInit(Z),
@@ -43,13 +45,6 @@ make_idat(Data) ->
     Chunk = <<"IDAT", Compressed/binary>>,
     CRC = erlang:crc32(Chunk),
     <<BSIZE:32, Chunk/binary, CRC:32>>.
-
-make_idata_raw([], Acc) ->
-    Acc;
-make_idata_raw([Row | RestRows], Acc) ->
-    % each row starts with 0 => no filter for scanline
-    B = list_to_binary(Row),
-    make_idata_raw(RestRows, <<Acc/binary, 0:8, B/binary>>).
 
 make_gray_png(Fname, Data) ->
     PngData = make_gray_png(Data),

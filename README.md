@@ -29,29 +29,36 @@ Run
 
 which will produce an ascii result                                                             
 ```
-  .                                                       . 
-    M                                                       
-             .                                              
-         .                                                  
-                         .                                 .
-            .           M                                  a
-             _         .                            .. ...MM
-          .  _M2..                                     .MMMM
-         _ .aMMMM _ . ..a               .  .          aaMMMM
-             MMMaMMMMM.Ma   .             _.        .  .MMMM
-             WMMMMMMMMMM_M .           ._ ..           .MMMM
-     .     _2MMMMMMMMMMMMMM.              _M2M  ._. M   .MMM
-           MMMMMMMMMMMMMMM2         ..  aMMMMM__MMMMMMMMaMMM
-       a aMMMMMMMMMMMMMMMMM_       _M. M _MMMMMMMMMMMMMMMMMM
-   .     _MMMMMMMMMMMMMMMMMM    2.a.MMMMMMMMMMMMMMMMMMMMMMMM
-          MMMMMMMMMMMMMMMMM.  2_ MMMMMMMMMMMMMMMMMMMMMMMMMMM
-          .2MMMMMMMMMMMMMMM  MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-          _MMMMMMMMMMMMMMM.MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-           ._MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-           . ..MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-                  .MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-                .MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-            ._MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+                                                .           
+                                                .           
+                                               .            
+                                                .           
+                                               ..        .  
+              .                                  ...  .. .  
+ .             .                                       ...  
+..             ..                                       ... 
+ ..           ..                                        ....
+ ...M. .     ...                                       .....
+   .......  ...         .                               ....
+       .._....          .                                 ..
+  .     ......  ..      ._                             ...._
+           ........  ...M                            ......2
+          ...a...... .._....                     ...._.___MM
+         ....aMW__.........          ..            ...._MMMM
+        .a..2MMMM.a._.__2.. .         .._.._        ..22MMMM
+        .....MMM2MMMMM_M2..._          ...a_..     ._.._MMMM
+         ....WMMMMMMMMMMaM._..        ._a._............_MMMM
+    ._.....aWMMMMMMMMMMMMMM_..   ..  .....aMWM.._a_.M..._MMM
+     ......MMMMMMMMMMMMMMMW... .....__..2MMMMMaaMMMMMMMM2MMM
+  .....2.2MMMMMMMMMMMMMMMMMa.......aM_.M.aMMMMMMMMMMMMMMMMMM
+ ........aMMMMMMMMMMMMMMMMMM....W_2.MMMMMMMMMMMMMMMMMMMMMMMM
+       ...MMMMMMMMMMMMMMMMM_..Wa.MMMMMMMMMMMMMMMMMMMMMMMMMMM
+       ..._WMMMMMMMMMMMMMMM..MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+       ...aMMMMMMMMMMMMMMM_MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+      ....._aMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+          ._.__MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+          .........MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+         ......._MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 ```
 
 as well as a PNG result
