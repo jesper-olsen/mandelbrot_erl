@@ -34,17 +34,17 @@ plot(Parallel, Type, LowerLeft, UpperRight, Bound) ->
             png:make_gray_png("mandelbrot.png", Pixels)
     end.
 
-escape(_, _, Limit, It) when It >= Limit ->
-    It;
-escape({Zr, Zi}, {Cr, Ci}, Limit, It) ->
+escape(_, _, Limit, N) when N >= Limit ->
+    N;
+escape({Zr, Zi}, {Cr, Ci}, Limit, N) ->
     % Note faster to calculate Zn here than in true clause, because
     % the beam will otherwise not keep it in a special register...
     Zn = {Zr * Zr - Zi * Zi + Cr, 2 * Zi * Zr + Ci}, % Z*Z + C
     case Zr * Zr + Zi * Zi < 2.0 of
         false ->
-            It;
+            N;
         true ->
-            escape(Zn, {Cr, Ci}, Limit, It + 1)
+            escape(Zn, {Cr, Ci}, Limit, N + 1)
     end.
 
 calc_pixels({LLx, LLy}, {URx, URy}, {WIDTH, HEIGHT}) ->
