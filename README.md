@@ -74,16 +74,29 @@ In parallel mode (option -p) the program spawns a separate process per image row
 All the times below are when running on a Macbook Air M1 (2020).
 
 ```
-$ time _build/default/bin/mandelbrot_erl -w 5000 -h 5000 -p
-```
+$ time _build/default/bin/mandelbrot_erl -w 5000 -h 5000 -p 1
 
-| Width  | Height | Parallel | Time (sec) |
-| ------:| ------:| :------: | ---------: |
-| 5000   | 5000   | false    | 61         |
-| 5000   | 5000   | true     | 27         |
-| 50000  | 500    | false    | 61         |
-| 50000  | 500    | true     | 17         |
-| 500000 | 50     | false    | 72         |
-| 500000 | 50     | true     | 19         |
-| 5000000| 5      | false    | 135        |
-| 5000000| 5      | true     | 27         |
+```
+#Sequential (calc_pixels)
+----------------
+| Time (real) | Time (user) | Speedup |
+| ---------:  | ----------: | ------: |
+| 56          | 41          |
+
+#Pmap (calc_pixels_pmap)
+----------------
+| #Workers | Time (real) | Time (user) | Speedup |
+| -------: | ---------:  | ----------: | ------: |
+|  5000    | 25          | 126         |
+
+#Split and Spawn (calc_pixels_split_and_spawn)
+----------------
+| #Workers | Time (real) | Time (user) | Speedup |
+| -------: | ---------:  | ----------: | ------: |
+|  1       | 53          | 49          |
+|  2       | 33          | 51          | 1.6
+|  4       | 19          | 52          | 2.8
+|  8       | 16          | 65          | 3.3
+| 16       | 16          | 67          | 3.3
+| 32       | 16          | 66          | 3.3
+| 5000     | 25          | 127         | 3.3

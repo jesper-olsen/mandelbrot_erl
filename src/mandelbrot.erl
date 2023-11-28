@@ -21,7 +21,9 @@ example() ->
     plot(ascii, {-1.20,0.20}, {-1.0,0.35},{60,30}, 1).
 
 plot(Type, LowerLeft, UpperRight, Bound, N_Workers) ->
-    Pixels = pcalc_pixels_split_n_spawn(LowerLeft, UpperRight, Bound, N_Workers),
+    Pixels = calc_pixels_split_n_spawn(LowerLeft, UpperRight, Bound, N_Workers),
+    %Pixels = calc_pixels_pmap(LowerLeft, UpperRight, Bound),
+    %Pixels = calc_pixels(LowerLeft, UpperRight, Bound),
     case Type of
         ascii ->
             render_ascii(Pixels);
@@ -62,7 +64,7 @@ calc_rows({LLx, LLy}, {URx, URy}, {WIDTH, HEIGHT}) ->
     [[{X, Y} || X <- R] || Y <- I].
 
 % parallel - spawn N_WORKERS processes
-pcalc_pixels_split_n_spawn(LL, UR, BOUND, N_WORKERS) ->
+calc_pixels_split_n_spawn(LL, UR, BOUND, N_WORKERS) ->
     S = self(),
     F = fun(Row) -> escape_row(Row) end,
     Workers = [spawn_link(fun() -> worker(S, F) end) || _ <- lists:seq(1,N_WORKERS)],
