@@ -28,14 +28,14 @@ cli() ->
              default => 1000},
            #{name => parallel,
              short => $p,
-             type => boolean,
-             default => false}],
+             type => integer,
+             default => 1}],
       handler =>
           fun(#{height := Height,
                 width := Width,
-                parallel := P}) ->
+                parallel := N_Workers}) ->
              LL = {-1.20, 0.20},
              UR = {-1.00, 0.35},
-             mandelbrot:plot(P, ascii, LL, UR, {60, 30}),
-             mandelbrot:plot(P, png, LL, UR, {Width, Height})
+             mandelbrot:plot(ascii, LL, UR, {60, 30}, N_Workers),
+             mandelbrot:plot(png, LL, UR, {Width, Height}, N_Workers)
           end}.

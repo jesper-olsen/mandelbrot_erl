@@ -18,16 +18,10 @@ cnt2char(N) when N>=0 ->
     [lists:nth(Idx + 1, symbols())].
 
 example() ->
-    plot(false, ascii, {-1.20,0.20}, {-1.0,0.35},{60,30}).
+    plot(ascii, {-1.20,0.20}, {-1.0,0.35},{60,30}, 1).
 
-plot(Parallel, Type, LowerLeft, UpperRight, Bound) ->
-    Pixels =
-        case Parallel of
-            false ->
-                calc_pixels(LowerLeft, UpperRight, Bound);
-            true ->
-                pcalc_pixels2(LowerLeft, UpperRight, Bound)
-        end,
+plot(Type, LowerLeft, UpperRight, Bound, N_Workers) ->
+    Pixels = pcalc_pixels_split_n_spawn(LowerLeft, UpperRight, Bound, N_Workers),
     case Type of
         ascii ->
             render_ascii(Pixels);
@@ -48,12 +42,14 @@ escape({Zr, Zi}, {Cr, Ci}, Limit, N) ->
             escape(Zn, {Cr, Ci}, Limit, N + 1)
     end.
 
+% sequential 
 calc_pixels({LLx, LLy}, {URx, URy}, {WIDTH, HEIGHT}) ->
     R = [LLx + X * (URx - LLx) / WIDTH || X <- lists:seq(0, WIDTH - 1)],
     I = [URy - Y * (URy - LLy) / HEIGHT || Y <- lists:seq(0, HEIGHT -1)],
     [[255 - escape({0.0, 0.0}, {X, Y}, 255, 0) || X <- R] || Y <- I].
 
-pcalc_pixels(LL, UR, BOUND) ->
+% parallel - spawn process for each row
+calc_pixels_pmap(LL, UR, BOUND) ->
     ROWS = calc_rows(LL, UR, BOUND),
     pmap(fun(Row) -> escape_row(Row) end, ROWS).
 
@@ -65,24 +61,25 @@ calc_rows({LLx, LLy}, {URx, URy}, {WIDTH, HEIGHT}) ->
     I = [URy - Y * (URy - LLy) / HEIGHT || Y <- lists:seq(0, HEIGHT -1)],
     [[{X, Y} || X <- R] || Y <- I].
 
-filter_results([]) -> [];
-filter_results([{Y,R} |T]) -> [R | filter_results(T)].
-
-pcalc() -> pcalc_pixels2({-1.20,0.20}, {-1.0,0.35},{60,30}).
-
-% split and spawn - n workers
-pcalc_pixels2(LL, UR, BOUND) ->
+% parallel - spawn N_WORKERS processes
+pcalc_pixels_split_n_spawn(LL, UR, BOUND, N_WORKERS) ->
     S = self(),
     F = fun(Row) -> escape_row(Row) end,
-    Workers = [spawn_link(fun() -> worker(S, F) end) || _ <- lists:seq(0,20)],
+    Workers = [spawn_link(fun() -> worker(S, F) end) || _ <- lists:seq(1,N_WORKERS)],
+    erlang:display(calc_rows),
     ROWS = calc_rows(LL, UR, BOUND),
+    erlang:display(sup_workers),
     sup_workers(Workers, ROWS, length(ROWS), []).
+
+filter_results([]) -> [];
+filter_results([{Y,R} |T]) -> [R | filter_results(T)].
 
 sup_workers([Worker | Workers], [Job | Jobs], N, Results) ->
     Worker ! {self(), {length(Jobs),Job}},
     sup_workers(Workers, Jobs, N, Results);
 
 sup_workers([], [], 0, Results) -> 
+    erlang:display(filter_results),
     R=lists:sort(fun({A,_},{B,_}) -> A>B end, Results),
     filter_results(R);
 
