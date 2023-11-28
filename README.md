@@ -78,13 +78,13 @@ $ time _build/default/bin/mandelbrot_erl -w 5000 -h 5000 -p 1
 
 ```
 ### Sequential (calc_pixels)
-----------------
+
 | Time (real) | Time (user) | Speedup |
 | ---------:  | ----------: | ------: |
 | 56          | 41          |
 
 ### Pmap (calc_pixels_pmap)
-----------------
+
 Spawn a process per row in the image - trivial merge of results.
 
 | #Workers | Time (real) | Time (user) | Speedup |
@@ -92,7 +92,7 @@ Spawn a process per row in the image - trivial merge of results.
 |  5000    | 25          | 126         |
 
 ### Split and Spawn (calc_pixels_split_and_spawn)
-----------------
+
 Spawn exactly #Workers processes - supervisor sends them one row at a 
 time to process and collects/merges the results as they come in.
 
