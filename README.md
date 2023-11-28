@@ -69,9 +69,9 @@ Benchmark
 
 By default the area with lower left {-1.20,0.20} and upper right {-1.0,0.35} is mapped.
 
-In parallel mode (option -p) the program spawns a separate process per image row. In the benchmark we keep the number of pixels fixed at 25 million and vary the number of processes spawned.
+In parallel mode (option -p N) the program spawns multiple worker processes- which should make it run faster on multi core CPU's. 
 
-All the times below are when running on a Macbook Air M1 (2020).
+All the times below are when running on a Macbook Air M1 (2020, 8 cores).
 
 ```
 $ time _build/default/bin/mandelbrot_erl -w 5000 -h 5000 -p 1
@@ -85,7 +85,7 @@ $ time _build/default/bin/mandelbrot_erl -w 5000 -h 5000 -p 1
 
 ### Pmap (calc_pixels_pmap)
 
-Spawn a process per row in the image - trivial merge of results.
+Parallel map a la Armstrong [1]: Spawn a process per row in the image - trivial merge of individual process results.
 
 | #Workers | Time (real) | Time (user) | Speedup |
 | -------: | ---------:  | ----------: | ------: |
@@ -104,4 +104,9 @@ time to process and collects/merges the results as they come in.
 |  8       | 16          | 65          | 3.3
 | 16       | 16          | 67          | 3.3
 | 32       | 16          | 66          | 3.3
-| 5000     | 25          | 127         | 3.3
+| 5000     | 25          | 127         | 2.1
+
+
+References
+-------
+[1] Programming Erlang, 2nd Ed, Joe Armstrong
