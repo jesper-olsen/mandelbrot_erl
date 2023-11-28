@@ -19,7 +19,7 @@ Usage:
 Optional arguments:
   -h height (int, 750)
   -w width (int, 1000)
-  -p parallel (false)
+  -p parallel (int, 1)
 ```
 
 
