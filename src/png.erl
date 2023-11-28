@@ -33,9 +33,9 @@ make_ihdr(Width, Height) ->
     <<BSIZE:32, Chunk/binary, CRC:32>>.
 
 list_to_idat_raw(ROWS) ->
-    L=lists:map(fun(L) -> list_to_binary(L) end, ROWS),
+    L = lists:map(fun(L) -> list_to_binary(L) end, ROWS),
     % each row starts with 0 => no filter for scanline
-    Raw = lists:foldl(fun(R,D) -> <<D/binary, 0:8, R/binary>> end, <<>>, L).
+    Raw = lists:foldl(fun(R, D) -> <<D/binary, 0:8, R/binary>> end, <<>>, L).
 
 make_idat(Raw) ->
     Z = zlib:open(),

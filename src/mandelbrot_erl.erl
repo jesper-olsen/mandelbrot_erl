@@ -18,11 +18,22 @@ main(Args) ->
 %%====================================================================
 cli() ->
     #{arguments =>
-          [#{name => height, short => $h, type => integer, default => 750},
-           #{name => width, short => $w, type => integer, default => 1000},
-           #{name => parallel, short => $p, type => boolean, default => false}],
+          [#{name => height,
+             short => $h,
+             type => integer,
+             default => 750},
+           #{name => width,
+             short => $w,
+             type => integer,
+             default => 1000},
+           #{name => parallel,
+             short => $p,
+             type => boolean,
+             default => false}],
       handler =>
-          fun(#{height := Height, width := Width, parallel := P}) ->
+          fun(#{height := Height,
+                width := Width,
+                parallel := P}) ->
              LL = {-1.20, 0.20},
              UR = {-1.00, 0.35},
              mandelbrot:plot(P, ascii, LL, UR, {60, 30}),
