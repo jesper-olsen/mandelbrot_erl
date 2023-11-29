@@ -69,7 +69,7 @@ Benchmark
 
 Below we will benchmark the time it takes to calculate a 25M pixel mandelbrot on a Macbook Air M1 (2020, 8 cores). All times are in seconds, and by the defaults it is the area with lower left {-1.20,0.20} and upper right {-1.0,0.35} that is mapped.
 
-In parallel mode the program spawns multiple worker processes- which should make it run faster on multi core CPU's. 
+Three different modes are explored below: sequential, pmap and "split and spawn". The latter two spawn multiple processes and should run faster on multi core CPUs.
 
 
 ```
