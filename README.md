@@ -67,11 +67,10 @@ as well as a PNG result
 Benchmark
 ---------
 
-By default the area with lower left {-1.20,0.20} and upper right {-1.0,0.35} is mapped.
+Below we will benchmark the time it takes to calculate a 25M pixel mandelbrot on a Macbook Air M1 (2020, 8 cores). All times are in seconds, and by the defaults it is the area with lower left {-1.20,0.20} and upper right {-1.0,0.35} that is mapped.
 
-In parallel mode (option -p N) the program spawns multiple worker processes- which should make it run faster on multi core CPU's. 
+In parallel mode the program spawns multiple worker processes- which should make it run faster on multi core CPU's. 
 
-All the times below are when running on a Macbook Air M1 (2020, 8 cores).
 
 ```
 $ time _build/default/bin/mandelbrot_erl -w 5000 -h 5000 -p 1
@@ -81,7 +80,7 @@ $ time _build/default/bin/mandelbrot_erl -w 5000 -h 5000 -p 1
 
 | Time (real) | Time (user) | Speedup |
 | ---------:  | ----------: | ------: |
-| 56          | 41          |
+| 56          | 41          |         |
 
 ### Pmap (calc_pixels_pmap)
 
@@ -89,7 +88,7 @@ Parallel map a la Armstrong [1]: Spawn a process per row in the image - trivial 
 
 | #Workers | Time (real) | Time (user) | Speedup |
 | -------: | ---------:  | ----------: | ------: |
-|  5000    | 25          | 126         |
+|  5000    | 25          | 126         |         |
 
 ### Split and Spawn (calc_pixels_split_and_spawn)
 
@@ -99,12 +98,12 @@ time to process and collects/merges the results as they come in.
 | #Workers | Time (real) | Time (user) | Speedup |
 | -------: | ---------:  | ----------: | ------: |
 |  1       | 53          | 49          |
-|  2       | 33          | 51          | 1.6
-|  4       | 19          | 52          | 2.8
-|  8       | 16          | 65          | 3.3
-| 16       | 16          | 67          | 3.3
-| 32       | 16          | 66          | 3.3
-| 5000     | 25          | 127         | 2.1
+|  2       | 33          | 51          | 1.6     |
+|  4       | 19          | 52          | 2.8     |
+|  8       | 16          | 65          | 3.3     |
+| 16       | 16          | 67          | 3.3     |
+| 32       | 16          | 66          | 3.3     |
+| 5000     | 25          | 127         | 2.1     |
 
 
 References
