@@ -6,7 +6,8 @@ Other languages:
 * [Rust](https://github.com/jesper-olsen/mandelbrot-rs) 
 * [Fortran](https://github.com/jesper-olsen/mandelbrot-f) 
 * [Python](https://github.com/jesper-olsen/mandelbrot-py) 
-* [Mojo](https://github.com/jesper-olsen/mandelbrot-mojo) 
+* [Mojo](https://github.com/jesper-olsen/mandelbrot-mojo)
+* [Nushell](https://github.com/jesper-olsen/mandelbrot-nu)
 
 
 Build
