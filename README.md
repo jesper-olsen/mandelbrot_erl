@@ -2,26 +2,35 @@ mandelbrot_erl
 ==============
 
 An escript for calculating the mandelbrot set.  Can run sequentially or spawn multiple processes.
-Other languages:
-* [Rust](https://github.com/jesper-olsen/mandelbrot-rs) 
-* [Fortran](https://github.com/jesper-olsen/mandelbrot-f) 
-* [Python](https://github.com/jesper-olsen/mandelbrot-py) 
-* [Mojo](https://github.com/jesper-olsen/mandelbrot-mojo)
-* [Nushell](https://github.com/jesper-olsen/mandelbrot-nu)
-* [Awk](https://github.com/jesper-olsen/mandelbrot-awk)
-* [Tcl](https://github.com/jesper-olsen/mandelbrot-tcl)
-* [R](https://github.com/jesper-olsen/mandelbrot-R)
-* [Lua](https://github.com/jesper-olsen/mandelbrot-lua)
+
+### Other Language Implementations
+
+This project compares the performance and features of Mandelbrot set generation in different languages.
+Single Thread/Multi-thread shows the number of seconds it takes to do a 5000x5000 calculation.
 
 
+| Language    | Repository                                                         | Single Thread   | Multi-Thread |
+| :--------   | :----------------------------------------------------------------- | ---------------:| -----------: |
+| Awk         | [mandelbrot-awk](https://github.com/jesper-olsen/mandelbrot-awk)   |           805.9 |              |
+| **C**       | [mandelbrot-c](https://github.com/jesper-olsen/mandelbrot-c)       |             6.9 |          1.4 |
+| **Erlang**  | [mandelbrot_erl](https://github.com/jesper-olsen/mandelbrot_erl)   |            56.0 |           16 |
+| Fortran     | [mandelbrot-f](https://github.com/jesper-olsen/mandelbrot-f)       |            11.6 |              |
+| Lua         | [mandelbrot-lua](https://github.com/jesper-olsen/mandelbrot-lua)   |           158.2 |              |
+| Mojo        | [mandelbrot-mojo](https://github.com/jesper-olsen/mandelbrot-mojo) |            39.6 |         39.2 |
+| Nushell     | [mandelbrot-nu](https://github.com/jesper-olsen/mandelbrot-nu)     |   (est) 11488.5 |              |
+| Python      | [mandelbrot-py](https://github.com/jesper-olsen/mandelbrot-py)     |    (pure) 177.2 | (jax)    7.5 |
+| R           | [mandelbrot-R](https://github.com/jesper-olsen/mandelbrot-R)       |           562.0 |              |
+| Rust        | [mandelbrot-rs](https://github.com/jesper-olsen/mandelbrot-rs)     |             8.4 |          2.2 |
+| Tcl         | [mandelbrot-tcl](https://github.com/jesper-olsen/mandelbrot-tcl)   |           706.1 |              |
+| Zig         | [mandelbrot-zig](https://github.com/jesper-olsen/mandelbrot-zig)   |             8.6 |          1.9 |
 
 
-Build
+### Build
 -----
 
     $ rebar3 escriptize
 
-Usage
+### Usage
 -----
 ```
 Usage:
@@ -34,7 +43,7 @@ Optional arguments:
 ```
 
 
-Run
+### Run
 ---
     $ _build/default/bin/mandelbrot_erl
 
@@ -75,7 +84,7 @@ which will produce an ascii result
 as well as a PNG result
 ![PNG](https://raw.githubusercontent.com/jesper-olsen/mandelbrot_erl/main/mandelbrot.png) 
 
-Benchmark
+### Benchmark
 ---------
 
 Below we will benchmark the time it takes to calculate a 25M pixel mandelbrot on a Macbook Air M1 (2020, 8 cores). All times are in seconds, and by the defaults it is the area with lower left {-1.20,0.20} and upper right {-1.0,0.35} that is mapped.
@@ -117,6 +126,6 @@ time to process and collects/merges the results as they come in.
 | 5000     | 25          | 127         | 2.1     |
 
 
-References
+### References
 -------
 [1] Programming Erlang, 2nd Ed, Joe Armstrong
