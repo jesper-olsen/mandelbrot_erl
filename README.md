@@ -16,7 +16,7 @@ Single Thread/Multi-thread shows the number of seconds it takes to do a 5000x500
 | [Ksh (93u+m)](https://github.com/jesper-olsen/mandelbrot-bash) |          1271.5 |              |      |                     |
 | [C](https://github.com/jesper-olsen/mandelbrot-c)              |             3.6 |          0.6 |  0.7 |               0.2   |
 | [C++](https://github.com/jesper-olsen/mandelbrot-cpp)          |             3.7 |          0.6 |  0.7 |               0.2   |
-| [**Erlang**](https://github.com/jesper-olsen/mandelbrot_erl)   |            35.6 |          8.3 |      |                     |
+| **[Erlang](https://github.com/jesper-olsen/mandelbrot_erl)**   |            35.6 |          8.3 |      |                     |
 | [Fortran](https://github.com/jesper-olsen/mandelbrot-f)        |             4.5 |              |      |                     |
 | [Go](https://github.com/jesper-olsen/mandelbrot-go)            |             4.1 |          0.8 |  1.3 |               0.4   |
 | [Lua](https://github.com/jesper-olsen/mandelbrot-lua)          |            33.2 |              |      |                     |
